@@ -11,5 +11,6 @@ splitting.lock
 # new stuff
 *.egg-info
 workdir
-slurm
+slurm/output
+slurm/tensorboard
 venv*

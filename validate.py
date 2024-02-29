@@ -172,8 +172,12 @@ if __name__ == "__main__":
         train_loss = mse
         eval_loss = mse
     
+    create_perfetto_trace = True
     if args.profile:
-        jax.profiler.start_trace("./slurm/tensorboard", create_perfetto_trace=True)
+        print("starting trace with tensorboard and perfetto.")
+        jax.profiler.start_trace(
+            "./slurm/tensorboard",
+            create_perfetto_trace=create_perfetto_trace)
     train(
         key,
         painn,
@@ -189,3 +193,4 @@ if __name__ == "__main__":
     )
     if args.profile:
         jax.profiler.stop_trace()
+        print("stopped trace.")
