@@ -17,6 +17,7 @@ def predict(
     state: hk.State,
     graph: jraph.GraphsTuple,
 ) -> Tuple[jnp.ndarray, hk.State]:
+    print("unjitted call to predict")
     (pred, _), state = model_fn(params, state, graph)
     return pred, state
 
@@ -30,6 +31,7 @@ def train_mse(
     model_fn: Callable,
     task: str,
 ) -> Tuple[float, hk.State]:
+    print("unjitted call to train_mse")
     pred, state = predict(model_fn, params, state, graph)
     if task == "node":
         mask = jraph.get_node_padding_mask(graph)
@@ -52,6 +54,7 @@ def eval_mae(
     prop: str,
     task: str,
 ) -> float:
+    print("unjitted call to eval_mae")
     pred = jax.lax.stop_gradient(predict(model_fn, params, state, graph)[0])
     if prop == QM9.U0 and eval_trn is not None:
         pred = eval_trn(graph, pred)
@@ -75,6 +78,7 @@ def update(
     loss_fn: Callable,
     opt_update: Callable,
 ) -> Tuple[float, hk.Params, hk.State, optax.OptState]:
+    print("unjitted call to update")
     (loss, state), grads = jax.value_and_grad(loss_fn, has_aux=True, allow_int=True)(
         params, state, graph, target
     )

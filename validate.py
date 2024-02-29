@@ -101,8 +101,17 @@ if __name__ == "__main__":
         action="store_true",
         help="Use double precision",
     )
+    parser.add_argument(
+        "--profile",
+        action="store_true",
+        help="Profile the jax code with tensorboard",
+    )
 
     args = parser.parse_args()
+
+    devices = jax.local_devices()
+    print("Jax devices: ", devices)
+    print("Target: ", args.target)
 
     # if specified set jax in double precision
     if args.double_precision:
@@ -162,7 +171,9 @@ if __name__ == "__main__":
 
         train_loss = mse
         eval_loss = mse
-
+    
+    if args.profile:
+        jax.profiler.start_trace("./slurm/tensorboard", create_perfetto_trace=True)
     train(
         key,
         painn,
@@ -176,3 +187,5 @@ if __name__ == "__main__":
         graph_transform=graph_transform,
         args=args,
     )
+    if args.profile:
+        jax.profiler.stop_trace()
