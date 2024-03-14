@@ -87,9 +87,13 @@ def train(
     _, test_loss = eval_fn(loader_test, params, painn_state)
     # ignore compilation time
     avg_time = avg_time[2:]
-    avg_time = sum(avg_time) / len(avg_time)
+    if len(avg_time) > 0:
+        avg_time = sum(avg_time) / len(avg_time)
     print(
         "Training done.\n"
-        f"Final test loss {test_loss:.6f} - checkpoint test loss {test_loss_ckp:.6f}.\n"
-        f"Average (model) eval time {avg_time:.2f}ms"
+        f"Final test loss {test_loss:.6f} - checkpoint test loss {test_loss_ckp:.6f}."
     )
+    if len(avg_time) > 0:
+        print(
+            f"Average (model) eval time {avg_time:.2f}ms"
+        )

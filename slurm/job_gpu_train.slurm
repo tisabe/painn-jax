@@ -23,4 +23,4 @@ cd ~/painn-jax
 
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
-srun python validate.py --profile --epochs 10 --val-freq 1
+srun python validate.py --profile --epochs 2 --val-freq 1
